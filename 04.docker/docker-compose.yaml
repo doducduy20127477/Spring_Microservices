@@ -12,6 +12,8 @@ services:
       - naming-server
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+
 
   currency-conversion:
     image: doducduy20127477/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
@@ -24,6 +26,7 @@ services:
       - naming-server
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
       CURRENCY_EXCHANGE_URL: http://currency-exchange:8000
 
   api-gateway:
@@ -37,6 +40,8 @@ services:
       - naming-server
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT: http://zipkin-server:9411/api/v2/spans
+
 
   naming-server:
     image: doducduy20127477/mmv2-naming-server:0.0.1-SNAPSHOT
@@ -45,6 +50,17 @@ services:
       - "8761:8761"
     networks:
       - currency-network
+
+  #docker run -p 9411:9411 openzipkin/zipkin:2.23
+
+  zipkin-server:
+    image: openzipkin/zipkin:2.23
+    mem_limit: 300m
+    ports:
+      - "9411:9411"
+    networks:
+      - currency-network
+    restart: always #Restart if there is a problem starting up
 
 
 networks:
