@@ -2,16 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
+    autopilot.gke.io/resource-adjustment: '{"input":{"containers":[{"name":"mmv2-currency-exchange-service"}]},"output":{"containers":[{"limits":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"requests":{"cpu":"500m","ephemeral-storage":"1Gi","memory":"2Gi"},"name":"mmv2-currency-exchange-service"}]},"modified":true}'
+    autopilot.gke.io/warden-version: 2.7.41
     deployment.kubernetes.io/revision: "1"
-  creationTimestamp: "2021-01-11T12:39:16Z"
+  creationTimestamp: "2023-12-13T10:18:27Z"
   generation: 1
   labels:
     app: currency-exchange
   name: currency-exchange
   namespace: default
-  resourceVersion: "19409"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/currency-exchange
-  uid: 38776f99-6715-46ba-b1cf-beebeb25716c
+  resourceVersion: "1113495"
+  uid: 17b8c9f4-dade-4068-98e1-fd0648666b88
 spec:
   progressDeadlineSeconds: 600
   replicas: 2
@@ -31,32 +32,51 @@ spec:
         app: currency-exchange
     spec:
       containers:
-      - image: in28min/mmv3-currency-exchange-service:0.0.11-SNAPSHOT
+      - image: doducduy20127477/mmv2-currency-exchange-service:0.0.11-SNAPSHOT
         imagePullPolicy: IfNotPresent
         name: mmv2-currency-exchange-service
-        resources: {}
+        resources:
+          limits:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            ephemeral-storage: 1Gi
+            memory: 2Gi
+        securityContext:
+          capabilities:
+            drop:
+            - NET_RAW
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext: {}
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.io/arch
+        operator: Equal
+        value: amd64
 status:
   availableReplicas: 1
   conditions:
-  - lastTransitionTime: "2021-01-11T12:39:33Z"
-    lastUpdateTime: "2021-01-11T12:39:33Z"
+  - lastTransitionTime: "2023-12-13T10:18:28Z"
+    lastUpdateTime: "2023-12-13T10:18:40Z"
+    message: ReplicaSet "currency-exchange-54ff78645" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2023-12-13T10:30:42Z"
+    lastUpdateTime: "2023-12-13T10:30:42Z"
     message: Deployment has minimum availability.
     reason: MinimumReplicasAvailable
     status: "True"
     type: Available
-  - lastTransitionTime: "2021-01-11T12:39:16Z"
-    lastUpdateTime: "2021-01-11T12:39:33Z"
-    message: ReplicaSet "currency-exchange-686bbff8dc" has successfully progressed.
-    reason: NewReplicaSetAvailable
-    status: "True"
-    type: Progressing
   observedGeneration: 1
   readyReplicas: 1
   replicas: 1
@@ -65,24 +85,32 @@ status:
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: "2021-01-11T12:40:00Z"
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: "2023-12-13T10:19:03Z"
   finalizers:
-  - service.kubernetes.io/load-balancer-cleanup
+    - service.kubernetes.io/load-balancer-cleanup
   labels:
     app: currency-exchange
   name: currency-exchange
   namespace: default
-  resourceVersion: "19686"
-  selfLink: /api/v1/namespaces/default/services/currency-exchange
-  uid: 67905263-6bbf-4ca0-8e5e-9385c24b9cd9
+  resourceVersion: "1105564"
+  uid: 18c712aa-d173-4047-ba56-176feea1ec82
 spec:
-  clusterIP: 10.4.1.68
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 34.118.226.36
+  clusterIPs:
+    - 34.118.226.36
   externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
-  - nodePort: 32531
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
+    - nodePort: 32274
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
   selector:
     app: currency-exchange
   sessionAffinity: None
@@ -90,4 +118,4 @@ spec:
 status:
   loadBalancer:
     ingress:
-    - ip: 34.66.241.150
+      - ip: 104.197.216.232
