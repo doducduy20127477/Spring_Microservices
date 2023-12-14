@@ -4,7 +4,7 @@ http://34.134.3.77:8000/:8000/currency-exchange/from/USD/to/INR
 
 Currency Conversion Service
 http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
-http://34.134.3.77:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+http://34.134.241.124:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
 
 http://35.223.40.231:8000/actuator/health/
 http://35.223.40.231:8000/actuator/health/liveness
