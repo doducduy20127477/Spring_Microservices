@@ -25,12 +25,9 @@ spec:
         app: currency-conversion
     spec:
       containers:
-      - image: doducduy20127477/mmv2-currency-conversion-service:0.0.12-SNAPSHOT
+      - image: doducduy20127477/mmv2-currency-conversion-service:0.0.11-SNAPSHOT
         imagePullPolicy: IfNotPresent
         name: mmv2-currency-conversion-service
-        env:
-          - name: CURRENCY_EXCHANGE_URI
-            value: http://currency-exchange
         resources:
           limits:
             cpu: 500m
